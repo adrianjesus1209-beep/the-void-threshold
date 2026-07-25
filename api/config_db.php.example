@@ -1,0 +1,10 @@
+<?php
+
+$db_config = [
+    'host'     => 'TU_HOST',
+    'puerto'   => '3306',
+    'db_name'  => 'TU_BASE_DE_DATOS',
+    'usuario'  => 'TU_USUARIO',
+    'password' => 'TU_PASSWORD',
+    'charset'  => 'utf8mb4'
+];

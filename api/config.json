@@ -1,0 +1,113 @@
+{
+    "general": {
+        "titulo": "THE VOID THRESHOLD",
+        "subtitulo": "Más allá de la realidad. Enfrenta al vacío.",
+        "boton_descarga_texto": "DESCARGAR DEMO",
+        "subtexto_descarga": "Demo gratuita - Windows - Próximamente 2026",
+        "enlace_descarga": "https:\/\/www.mediafire.com\/file\/xo56ti9x97eshdn\/juego.rar\/file"
+    },
+    "multimedia": {
+        "fondo": "uploads\/imagenes\/fondo.jpg",
+        "logo_claro": "uploads\/imagenes\/logo_claro.png",
+        "logo_oscuro": "uploads\/imagenes\/logo_oscuro.png",
+        "audio_clic": "uploads\/audio\/audio_clic.mp3",
+        "audio_musica": "uploads\/audio\/audio_musica.mp3",
+        "fotos": [
+            {
+                "url": "uploads\/galeria\/foto_0.jpeg",
+                "descripcion": "onda rotativa transexual"
+            },
+            {
+                "url": "uploads\/galeria\/foto_1.jpg",
+                "descripcion": "monda paraa"
+            },
+            {
+                "url": "uploads\/galeria\/foto_2.jpeg",
+                "descripcion": "Linux penguin"
+            },
+            {
+                "url": "uploads\/galeria\/foto_3.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_4.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_5.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_6.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_7.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_8.jpg",
+                "descripcion": ""
+            },
+            {
+                "url": "uploads\/galeria\/foto_9.jpg",
+                "descripcion": ""
+            }
+        ]
+    },
+    "redes": [
+        {
+            "nombre": "YOUTUBE",
+            "url": "https:\/\/www.youtube.com\/@Leviatan_LVTN"
+        }
+    ],
+    "novedades": [
+        {
+            "id": 1,
+            "tag": "ACTUALIZACIÓN v0.8.4",
+            "tag_color": "#1684e3",
+            "fecha": "22 JUL 2026",
+            "titulo": "NUEVAS DIMENSIONES PROCEDURALES",
+            "descripcion": "Se han detectado nuevas distorsiones en el motor del vacío. Nuevas salas secretas, eventos climáticos glitch y enemigos de élite añadidos al mapa."
+        },
+        {
+            "id": 2,
+            "tag": "BANDA SONORA",
+            "tag_color": "#39b18d",
+            "fecha": "15 JUL 2026",
+            "titulo": "NUEVOS TEMAS CHIPTUNE EN DIRECTO",
+            "descripcion": "Integración de 4 nuevas pistas sintetizadas de 8-bit para las batallas contra los Jefes de Dimensión."
+        },
+        {
+            "id": 3,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        }
+    ],
+    "caracteristicas": [
+        {
+            "numero": "01",
+            "color": "#ff0033",
+            "titulo": "MUNDOS PROCEDURALES",
+            "descripcion": "Cada partida genera un mundo pixelado único lleno de secretos y peligro. claro solo si te gustan las mujeres por que al ser una negra tan bastarda aveces es dudosa tu hombria pinche maricon",
+            "imagen": "uploads\/imagenes\/feat_0.png"
+        },
+        {
+            "numero": "02",
+            "color": "#0040ff",
+            "titulo": "BANDA SONORA 8-BIT",
+            "descripcion": "Una partitura chiptune que se adapta a tu descenso hacia el vacío.",
+            "imagen": "uploads\/imagenes\/feat_1.jpg"
+        },
+        {
+            "numero": "03",
+            "color": "#ff0033",
+            "titulo": "JEFE FINALES",
+            "descripcion": "Enfrenta guardianes monstruosos en el umbral de cada dimensión.",
+            "imagen": "uploads\/imagenes\/feat_2.jpeg"
+        }
+    ]
+}

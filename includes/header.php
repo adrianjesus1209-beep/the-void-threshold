@@ -39,7 +39,6 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="<?=$base?>js/figura-particles.js"></script>
 </head>
 
 <body id="top">
@@ -211,9 +210,6 @@
       }
       localStorage.setItem('theme', theme);
       updateThemeIcon();
-      if (typeof window.reinitFiguraParticles === 'function') {
-        window.reinitFiguraParticles(theme === 'dark');
-      }
     }
 
     themeToggle.addEventListener('click', () => {

@@ -11,5 +11,5 @@
     Require all denied
 </FilesMatch>
 
-# Enable directory browsing
-Options +Indexes
+# Disable directory browsing
+Options -Indexes

@@ -11,10 +11,5 @@
     Require all denied
 </FilesMatch>
 
-# Deny access to credentials file
-<Directory "LOCAL_NO_SUBIR">
-    Require all denied
-</Directory>
-
-# Disable directory browsing
+# Enable directory browsing
 Options +Indexes

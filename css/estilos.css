@@ -206,41 +206,30 @@ nav, footer, .gallery-entrance, .carousel-section,
   35% {
     transform: translate(0) scale(1) skewX(0);
     filter: none;
-    opacity: 1;
   }
 
-  10%,
-  25% {
-    opacity: 0.98;
-  }
   36% {
     transform: translate(-1.5px, 0.5px) skewX(1deg);
-    opacity: 0.95;
   }
 
   37% {
     transform: translate(1.5px, -0.5px) skewX(-1deg);
-    opacity: 1;
   }
 
   38% {
     transform: translate(-0.5px, 1px) skewX(2deg);
-    opacity: 0.98;
   }
 
   39% {
     transform: translate(0.5px, -1px) skewX(-2deg);
-    opacity: 1;
   }
 
   40% {
     transform: translate(-1.5px, 0.5px) skewX(1deg);
-    opacity: 0.95;
   }
   43% {
     transform: translate(0) scale(1);
     filter: contrast(1.1);
-    opacity: 1;
   }
 
   43.5% {
@@ -265,7 +254,6 @@ nav, footer, .gallery-entrance, .carousel-section,
   46.5% {
     transform: translate(0) scale(1.08) scaleY(1.1);
     filter: brightness(3) contrast(2);
-    opacity: 0.95;
   }
 
   47% {
@@ -276,24 +264,20 @@ nav, footer, .gallery-entrance, .carousel-section,
   47.4% {
     transform: scaleY(0.04) scaleX(1.2);
     filter: brightness(6) contrast(3);
-    opacity: 0.9;
   }
 
   47.8% {
     transform: scaleX(0.04) scaleY(0.005);
     filter: brightness(10);
-    opacity: 0.9;
   }
   48.5%,
   50% {
     transform: scale(0);
-    opacity: 0;
     filter: none;
   }
   51% {
     transform: translate(8px, -3px) scaleY(1.3) scaleX(0.9) skewX(-10deg);
     filter: invert(0.8) brightness(1.5) contrast(1.5);
-    opacity: 1;
   }
 
   52% {
@@ -311,23 +295,19 @@ nav, footer, .gallery-entrance, .carousel-section,
   }
   56% {
     transform: translate(1px, -0.5px);
-    opacity: 0.97;
   }
 
   59% {
     transform: translate(-1px, 0.5px);
-    opacity: 1;
   }
 
   62% {
     transform: translate(0);
-    opacity: 1;
   }
   64%,
   100% {
     transform: translate(0) scale(1) skewX(0);
     filter: none;
-    opacity: 1;
   }
 }
 
@@ -785,12 +765,10 @@ nav, footer, .gallery-entrance, .carousel-section,
 
 @keyframes slow-pulse {
   0% {
-    opacity: 0.8;
     text-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
   }
 
   100% {
-    opacity: 1;
     text-shadow: 0 0 20px rgba(255, 0, 51, 1), 0 0 40px rgba(255, 0, 51, 0.6);
   }
 }

@@ -41,7 +41,7 @@
   <section id="gallery-entrance" class="gallery-entrance">
     <div class="gallery-grid"></div>
     <div class="gallery-entrance-text">
-      <h2 class="gallery-title section-glitch font-pixel text-3xl sm:text-5xl tracking-[0.5em] text-white" data-text="GALERÍA">GALERÍA</h2>
+      <h2 class="gallery-title section-glitch font-pixel text-2xl sm:text-4xl tracking-[0.5em] text-white" data-text="GALERÍA">GALERÍA</h2>
       <div class="scroll-indicator mt-4 flex flex-col items-center gap-4 mb-4">
         <div class="chevron-down"></div>
       </div>
@@ -177,30 +177,65 @@
         });
       }
 
-      if (!entrance || !text) return;
-
-      gsap.to(text, {
-        opacity: 0,
-        y: -100,
-        scale: 0.9,
-        scrollTrigger: {
-          trigger: entrance,
-          start: 'top top',
-          end: '70% top',
-          scrub: 1.2,
-        }
-      });
-
-      if (grid) {
-        gsap.to(grid, {
-          opacity: 0,
-          scrollTrigger: {
-            trigger: entrance,
-            start: '30% top',
-            end: '80% top',
-            scrub: true,
+      if (entrance && text) {
+        gsap.fromTo(text,
+          { opacity: 0, y: 40, scale: 0.9 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            scrollTrigger: {
+              trigger: entrance,
+              start: 'top bottom',
+              end: 'top center',
+              scrub: 1.2,
+            }
           }
-        });
+        );
+
+        if (grid) {
+          gsap.to(grid, {
+            opacity: 0,
+            scrollTrigger: {
+              trigger: entrance,
+              start: '30% top',
+              end: '80% top',
+              scrub: true,
+            }
+          });
+        }
+      }
+
+      const newsSection = document.getElementById('news');
+      const newsText = newsSection && newsSection.querySelector('.gallery-entrance-text');
+      if (newsText) {
+        gsap.fromTo(newsText,
+          { opacity: 0, y: 40, scale: 0.9 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            scrollTrigger: {
+              trigger: newsSection,
+              start: 'top bottom',
+              end: 'top center',
+              scrub: 1.2,
+            }
+          }
+        );
+      }
+
+      const figuraSection = document.getElementById('figura');
+      const figuraText = figuraSection && figuraSection.querySelector('.glitch');
+      if (figuraText) {
+        gsap.fromTo(figuraText,
+          { opacity: 0, y: 40, scale: 0.9 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            scrollTrigger: {
+              trigger: figuraSection,
+              start: 'top bottom',
+              end: 'top center',
+              scrub: 1.2,
+            }
+          }
+        );
       }
     })();
 

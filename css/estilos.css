@@ -590,6 +590,20 @@ nav, footer, .gallery-entrance, .carousel-section,
     transform: translateY(0);
   }
 }
+/* Figura Particles Section */
+.animation-section {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  position: relative;
+}
+
+.animation-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

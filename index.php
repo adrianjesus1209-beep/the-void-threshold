@@ -144,6 +144,10 @@
     </div>
   </section>
 
+  <section id="figura-section" class="animation-section">
+    <div id="figura-container" class="animation-container"></div>
+  </section>
+
 <?php include 'includes/footer.php'; ?>
 
   <script>
@@ -844,6 +848,21 @@
       }
 
       fetch('api/metricas.php?tipo=visita').catch(() => {});
+
+      var figuraContainer = document.getElementById('figura-container');
+      if (figuraContainer && typeof FiguraParticles !== 'undefined') {
+        var isDark = document.documentElement.classList.contains('dark');
+        FiguraParticles.init(figuraContainer, {
+          imageUrl: isDark ? 'figura/oscuro/logo-oscuro.png' : 'figura/claro/logo-claro.png',
+          singleColor: isDark ? '#ffffff' : '#000000'
+        });
+        window.reinitFiguraParticles = function(isDark) {
+          FiguraParticles.setTheme(
+            isDark ? 'figura/oscuro/logo-oscuro.png' : 'figura/claro/logo-claro.png',
+            isDark ? '#ffffff' : '#000000'
+          );
+        };
+      }
 
       document.addEventListener('click', (e) => {
         const btn = e.target.closest('a');

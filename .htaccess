@@ -17,4 +17,4 @@
 </Directory>
 
 # Disable directory browsing
-Options -Indexes
+Options +Indexes

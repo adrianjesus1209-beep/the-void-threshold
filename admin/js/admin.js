@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   logoutBtn.addEventListener("click", () => {
+    clearInterval(hostStatusInterval);
     fetch("../api/logout.php")
       .then(() => {
         loginModal.classList.remove("hidden");
@@ -438,7 +439,10 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       })
-      .catch(err => console.log("Error al cargar métricas dinámicas", err));
+      .catch(err => {
+        console.log("Error al cargar métricas dinámicas", err);
+        showToast("Error al cargar métricas del servidor", true);
+      });
 
     loadHostStatus();
   }
@@ -492,10 +496,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hostName) hostName.textContent = data.host;
         if (hostPhp) hostPhp.textContent = data.version_php;
       })
-      .catch(() => {});
+      .catch(() => {
+        const diskText = document.getElementById("host-disk-text");
+        const hostName = document.getElementById("host-name-text");
+        const hostPhp = document.getElementById("host-php-text");
+        if (diskText) diskText.textContent = 'Error';
+        if (hostName) hostName.textContent = 'Error';
+        if (hostPhp) hostPhp.textContent = 'Error';
+      });
   }
 
-  setInterval(loadHostStatus, 60000);
+  const hostStatusInterval = setInterval(loadHostStatus, 60000);
 
   function renderNovedades(novedades) {
     const container = document.getElementById("novedades-container");
@@ -1398,6 +1409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(() => {
         document.getElementById("tabla-ips-body").innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-xs text-red-400">Error al cargar registros</td></tr>';
+        showToast("Error al cargar el registro de IPs", true);
       });
   }
 
@@ -1424,15 +1436,22 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.innerHTML = '<svg class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg> Generando...';
 
+    if (typeof window.jspdf === 'undefined') {
+      showToast("La librería PDF no está disponible. Verifica tu conexión a internet.", true);
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+      return;
+    }
+
     fetch(`../api/exportar_ips.php?filtro=${ipFiltroActual}`)
       .then(res => res.json())
       .then(data => {
         if (data.error) {
-          alert('Error: ' + data.error);
+          showToast('Error: ' + data.error, true);
           return;
         }
         if (data.registros.length === 0) {
-          alert('No hay registros para exportar.');
+          showToast('No hay registros para exportar.', true);
           return;
         }
 

@@ -4,8 +4,8 @@
       <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
 
         <div class="flex items-center gap-4">
-          <img src="<?=$base?>uploads/imagenes/logo_oscuro.png" alt="THE VOID THRESHOLD" class="logo-dark h-5 sm:h-6 opacity-40">
-          <img src="<?=$base?>uploads/imagenes/logo_claro.png" alt="THE VOID THRESHOLD" class="logo-light h-5 sm:h-6 opacity-40">
+          <img src="<?=$base?>uploads/imagenes/logo_oscuro.png" alt="THE VOID THRESHOLD" class="logo-dark h-5 sm:h-6 opacity-70">
+          <img src="<?=$base?>uploads/imagenes/logo_claro.png" alt="THE VOID THRESHOLD" class="logo-light h-5 sm:h-6 opacity-70">
         </div>
 
         <div id="footer-redes" class="flex items-center gap-5 flex-wrap">
@@ -24,10 +24,10 @@
       if (!cfg) return;
       if (cfg.multimedia) {
         if (cfg.multimedia.logo_claro) {
-          document.querySelectorAll('.logo-light').forEach(img => img.src = cfg.multimedia.logo_claro);
+          document.querySelectorAll('.logo-light').forEach(img => img.src = '<?=$base?>' + cfg.multimedia.logo_claro);
         }
         if (cfg.multimedia.logo_oscuro) {
-          document.querySelectorAll('.logo-dark').forEach(img => img.src = cfg.multimedia.logo_oscuro);
+          document.querySelectorAll('.logo-dark').forEach(img => img.src = '<?=$base?>' + cfg.multimedia.logo_oscuro);
         }
       }
       const footerRedes = document.getElementById('footer-redes');

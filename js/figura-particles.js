@@ -169,9 +169,12 @@
     };
     tryLoad(true);
   }
+var figFrameCount = 0;
 function draw() {
     animFrame = requestAnimationFrame(draw);
     if (!visible) return;
+    figFrameCount++;
+    if (animState === "idle" && figFrameCount % 2 === 0) return;
     var PW=canvas.width, PH=canvas.height;
     if (!PW || !PH) return;
     var dpr = window.devicePixelRatio || 1;

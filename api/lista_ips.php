@@ -1,7 +1,16 @@
 <?php
 session_start();
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: ' . (isset($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] : '*'));
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowed_origins = ['http://localhost', 'http://127.0.0.1'];
+if (in_array($origin, $allowed_origins)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+} elseif (isset($_SERVER['HTTP_HOST'])) {
+    $host = $_SERVER['HTTP_HOST'];
+    if ($host === 'localhost' || $host === '127.0.0.1' || explode(':', $host)[0] === 'localhost') {
+        header('Access-Control-Allow-Origin: http://' . $host);
+    }
+}
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     http_response_code(403);

@@ -1,7 +1,7 @@
 <?php $base = ''; ?>
 <?php include 'includes/header.php'; ?>
 
-  <main class="hero-bg crt-flicker relative overflow-hidden">
+  <main class="hero-bg relative overflow-hidden">
 
     <div class="crt-overlay"></div>
 
@@ -29,7 +29,7 @@
 
       <div id="download" class="fade-in fade-in-delay-3 text-center">
         <a href="javascript:void(0)" target="_blank" rel="noopener noreferrer"
-          class="neon-btn mb-4 inline-block rounded bg-[#ff0033] px-8 py-3 font-pixel text-[10px] text-white transition-all hover:bg-[#ff1a4d] sm:text-xs">
+          class="neon-btn mb-4 inline-block rounded bg-[#ff0033] px-8 py-3 font-pixel text-[12px] text-white transition-all hover:bg-[#ff1a4d] sm:text-xs">
           DESCARGAR DEMO
         </a>
         <p class="font-retro text-sm text-white/30">Demo gratuita &middot; Windows &middot; Próximamente 2026</p>
@@ -54,16 +54,16 @@
 
       <canvas id="starfield-canvas" class="starfield-canvas"></canvas>
       <div class="carousel-stage" id="carousel-stage">
-        <div class="carousel-card" data-index="0"><img src="uploads/galeria/foto_0.jpg" alt="Foto 01"></div>
-        <div class="carousel-card" data-index="1"><img src="uploads/galeria/foto_1.jpg" alt="Foto 02"></div>
-        <div class="carousel-card" data-index="2"><img src="uploads/galeria/foto_2.jpg" alt="Foto 03"></div>
-        <div class="carousel-card" data-index="3"><img src="uploads/galeria/foto_3.jpg" alt="Foto 04"></div>
-        <div class="carousel-card" data-index="4"><img src="uploads/galeria/foto_4.jpg" alt="Foto 05"></div>
-        <div class="carousel-card" data-index="5"><img src="uploads/galeria/foto_5.jpg" alt="Foto 06"></div>
-        <div class="carousel-card" data-index="6"><img src="uploads/galeria/foto_6.jpg" alt="Foto 07"></div>
-        <div class="carousel-card" data-index="7"><img src="uploads/galeria/foto_7.jpg" alt="Foto 08"></div>
-        <div class="carousel-card" data-index="8"><img src="uploads/galeria/foto_8.jpg" alt="Foto 09"></div>
-        <div class="carousel-card" data-index="9"><img src="uploads/galeria/foto_9.jpg" alt="Foto 10"></div>
+        <div class="carousel-card" data-index="0"><img src="uploads/galeria/foto_0.webp" alt="Foto 01" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="1"><img src="uploads/galeria/foto_1.webp" alt="Foto 02" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="2"><img src="uploads/galeria/foto_2.webp" alt="Foto 03" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="3"><img src="uploads/galeria/foto_3.webp" alt="Foto 04" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="4"><img src="uploads/galeria/foto_4.webp" alt="Foto 05" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="5"><img src="uploads/galeria/foto_5.webp" alt="Foto 06" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="6"><img src="uploads/galeria/foto_6.webp" alt="Foto 07" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="7"><img src="uploads/galeria/foto_7.webp" alt="Foto 08" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="8"><img src="uploads/galeria/foto_8.webp" alt="Foto 09" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="carousel-card" data-index="9"><img src="uploads/galeria/foto_9.webp" alt="Foto 10" loading="lazy" decoding="async" fetchpriority="low"></div>
       </div>
     </div>
   </section>
@@ -240,6 +240,7 @@
     })();
 
     (function () {
+      if (window.innerWidth <= 768) return;
       const section = document.getElementById('carousel');
       const scene = document.getElementById('carousel-scene');
       const stage = document.getElementById('carousel-stage');
@@ -262,6 +263,9 @@
         { x: 880, y: 80, z: -400, rY: 68, rZ: 28, s: 0.65 },
       ];
 
+      const setTf = cards.map(c => function(v) { c.style.transform = v; });
+      const setOpacity = cards.map(c => gsap.quickSetter(c, 'opacity'));
+
       gsap.set(cards, {
         x: 0, y: 0, z: 0,
         rotateY: 0, rotateZ: 0, rotateX: 0,
@@ -271,31 +275,66 @@
         zIndex: (i) => N - i,
       });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1,
-          onUpdate: (self) => {
-            if (progressBar) progressBar.style.transform = 'scaleX(' + self.progress + ')';
+      const easeScroll = gsap.parseEase('power2.inOut');
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 2,
+        onUpdate: (self) => {
+          const p = easeScroll(self.progress);
+          if (progressBar) progressBar.style.transform = 'scaleX(' + self.progress + ')';
+          for (let i = 0; i < N; i++) {
+            const t = targets[i] || targets[N - 1];
+            const iScale = i === 0 ? 1 : 0.85;
+            const s = iScale + (t.s - iScale) * p;
+            setTf[i]('translate3d(' + (t.x * p) + 'px,' + (t.y * p) + 'px,' + (t.z * p) + 'px) rotateY(' + (t.rY * p) + 'deg) rotateZ(' + (t.rZ * p) + 'deg) scale(' + s + ')');
+            const iOp = i === 0 ? 1 : 0;
+            setOpacity[i](iOp + (1 - iOp) * p);
           }
         }
       });
 
-      cards.forEach((card, i) => {
-        const t = targets[i] || targets[N - 1];
-        tl.fromTo(card,
-          { x: 0, y: 0, z: 0, rotateY: 0, rotateZ: 0, scale: i === 0 ? 1 : 0.85, opacity: i === 0 ? 1 : 0 },
-          {
-            x: t.x, y: t.y, z: t.z, rotateY: t.rY, rotateZ: t.rZ, scale: t.s,
-            opacity: 1,
-            ease: 'power2.inOut'
-          },
-          0
-        );
-      });
+    })();
 
+    (function () {
+      if (window.innerWidth > 768) return;
+      const section = document.getElementById('carousel');
+      const scene = document.getElementById('carousel-scene');
+      const stage = document.getElementById('carousel-stage');
+      const cards = document.querySelectorAll('#carousel-stage .carousel-card');
+      if (!section || !scene || !stage || cards.length === 0) return;
+      const cardWidth = 90 * window.innerWidth / 100;
+      const gap = 20;
+      const viewportCenter = (scene.offsetWidth / 2) - (cardWidth / 2);
+      cards.forEach((card, i) => {
+        card.style.left = (i * (cardWidth + gap)) + 'px';
+        card.style.top = '50%';
+        card.style.transform = 'translateY(-50%)';
+        card.style.marginLeft = '0';
+        const img = card.querySelector('img');
+        if (img) {
+          if (img.complete) img.classList.add('loaded');
+          else img.addEventListener('load', function() { this.classList.add('loaded'); });
+        }
+      });
+      const totalW = cards.length * (cardWidth + gap) - gap;
+      stage.style.width = totalW + 'px';
+      stage.style.transform = 'translate3d(' + viewportCenter + 'px, 0, 0)';
+      const maxScrollX = Math.max(0, totalW - cardWidth);
+      section.style.height = (cards.length * 30 + 18) + 'vh';
+      function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 4.5,
+        onUpdate: (self) => {
+          const p = easeInOut(self.progress);
+          stage.style.transform = 'translate3d(' + (viewportCenter - p * maxScrollX) + 'px, 0, 0)';
+        }
+      });
     })();
 
     (function () {
@@ -303,18 +342,20 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let W, H, particles, comets;
-      const STAR_COUNT = 240;
-      const MAX_COMETS = 7;
+      const isMobile = window.innerWidth <= 768;
+      const STAR_COUNT = isMobile ? 50 : 120;
+      const MAX_COMETS = isMobile ? 2 : 4;
 
       function resize() {
-        W = canvas.width = canvas.offsetWidth;
-        H = canvas.height = canvas.offsetHeight;
+        W = canvas.width = canvas.offsetWidth / 2 | 0;
+        H = canvas.height = canvas.offsetHeight / 2 | 0;
       }
 
       function rand(a, b) { return a + Math.random() * (b - a); }
 
       function createStar() {
         const size = rand(0.4, 3.0);
+        const r = Math.floor(rand(200, 255));
         return {
           x: rand(0, W), y: rand(0, H), size,
           opacity: rand(0.15, size > 1.8 ? 0.95 : 0.6),
@@ -325,6 +366,9 @@
           floatFreq: rand(0.005, 0.02),
           floatAmp: rand(0.1, 0.3),
           glow: size > 1.6,
+          colorR: r,
+          colorG: Math.floor(r * 0.04),
+          colorB: Math.floor(r * 0.08),
         };
       }
 
@@ -359,6 +403,35 @@
         };
       }
 
+      function resetComet(comet, immediate) {
+        const dir = Math.random() > 0.5 ? 1 : -1;
+        const speed = rand(7, 15);
+        const angleDeg = rand(20, 55);
+        const angle = angleDeg * (Math.PI / 180);
+        const tailLen = rand(130, 300);
+
+        let startX, startY;
+        if (dir === 1) {
+          const fromTop = Math.random() > 0.4;
+          startX = fromTop ? rand(-100, W * 0.7) : rand(-200, -80);
+          startY = fromTop ? rand(-200, -60) : rand(0, H * 0.5);
+        } else {
+          const fromTop = Math.random() > 0.4;
+          startX = fromTop ? rand(W * 0.3, W + 100) : rand(W + 80, W + 200);
+          startY = fromTop ? rand(-200, -60) : rand(0, H * 0.5);
+        }
+
+        comet.x = startX;
+        comet.y = startY;
+        comet.vx = dir * Math.cos(angle) * speed;
+        comet.vy = Math.sin(angle) * speed;
+        comet.tailLen = tailLen;
+        comet.headR = rand(1.6, 3.5);
+        comet.hue = `${Math.floor(rand(220, 255))}, ${Math.floor(rand(5, 45))}, ${Math.floor(rand(5, 30))}`;
+        comet.delay = immediate ? Math.floor(rand(0, 80)) : Math.floor(rand(20, 180));
+        comet.active = immediate && Math.random() > 0.3;
+      }
+
       function initComets() {
         comets = [];
         for (let i = 0; i < MAX_COMETS; i++) {
@@ -374,33 +447,22 @@
 
         const grad = ctx.createLinearGradient(c.x, c.y, tailX, tailY);
         grad.addColorStop(0,   `rgba(255, 255, 240, 1)`);
-        grad.addColorStop(0.06, `rgba(255, 120, 80, 0.95)`);
-        grad.addColorStop(0.18, `rgba(${c.hue}, 0.85)`);
-        grad.addColorStop(0.5,  `rgba(${c.hue}, 0.35)`);
+        grad.addColorStop(0.15, `rgba(255, 120, 80, 0.85)`);
+        grad.addColorStop(0.5,  `rgba(${c.hue}, 0.25)`);
         grad.addColorStop(1,    `rgba(${c.hue}, 0)`);
 
         ctx.save();
         ctx.strokeStyle = grad;
-        ctx.lineWidth = c.headR * 1.6;
+        ctx.lineWidth = c.headR * 1.4;
         ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.moveTo(c.x, c.y);
         ctx.lineTo(tailX, tailY);
         ctx.stroke();
 
-        const grd = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.headR * 5);
-        grd.addColorStop(0,   'rgba(255, 255, 255, 1)');
-        grd.addColorStop(0.2, `rgba(255, 100, 60, 0.9)`);
-        grd.addColorStop(0.6, `rgba(${c.hue}, 0.4)`);
-        grd.addColorStop(1,   `rgba(${c.hue}, 0)`);
         ctx.beginPath();
-        ctx.arc(c.x, c.y, c.headR * 5, 0, Math.PI * 2);
-        ctx.fillStyle = grd;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.headR, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        ctx.arc(c.x, c.y, c.headR * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 200, 200, 0.9)`;
         ctx.fill();
 
         ctx.restore();
@@ -416,48 +478,64 @@
         c.y += c.vy;
 
         if (c.x > W + 350 || c.x < -350 || c.y > H + 350) {
-          comets[i] = createComet(false);
+          resetComet(c, false);
         }
       }
 
       function init() {
         resize();
+        glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+        glowGradient.addColorStop(0,   'rgba(255, 20, 40, 1)');
+        glowGradient.addColorStop(0.4, 'rgba(200, 0, 20, 0.4)');
+        glowGradient.addColorStop(1,   'rgba(120, 0, 10, 0)');
         particles = Array.from({ length: STAR_COUNT }, createStar);
+        glowStars = particles.filter(function(p) { return p.glow; });
+        plainStars = particles.filter(function(p) { return !p.glow; });
         initComets();
       }
 
+      let glowGradient = null;
+      let glowStars = [];
+      let plainStars = [];
       let frame = 0;
       let canvasVisible = true;
       let rafId = null;
       function draw() {
         if (!canvasVisible) { rafId = null; return; }
-        ctx.clearRect(0, 0, W, H);
         frame++;
+        if (frame % 2 === 0) { rafId = requestAnimationFrame(draw); return; }
+        ctx.clearRect(0, 0, W, H);
 
-        for (let p of particles) {
+        for (let p of glowStars) {
           const twinkle = Math.sin(frame * p.twinkleSpeed + p.twinklePhase);
           const alpha = Math.max(0.05, p.opacity + twinkle * (p.opacity * 0.5));
-
-          if (p.glow) {
-            const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
-            grd.addColorStop(0,   `rgba(255, 20, 40, ${alpha})`);
-            grd.addColorStop(0.4, `rgba(200, 0, 20, ${alpha * 0.4})`);
-            grd.addColorStop(1,   'rgba(120, 0, 10, 0)');
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
-            ctx.fillStyle = grd;
-            ctx.fill();
-          }
-
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.translate(p.x, p.y);
+          ctx.scale(p.size * 4, p.size * 4);
+          ctx.beginPath();
+          ctx.arc(0, 0, 1, 0, Math.PI * 2);
+          ctx.fillStyle = glowGradient;
+          ctx.fill();
+          ctx.restore();
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          const r = Math.floor(rand(200, 255));
-          ctx.fillStyle = `rgba(${r}, ${Math.floor(r * 0.04)}, ${Math.floor(r * 0.08)}, ${alpha})`;
+          ctx.fillStyle = `rgba(${p.colorR}, ${p.colorG}, ${p.colorB}, ${alpha})`;
           ctx.fill();
+        }
 
+        for (let p of plainStars) {
+          const twinkle = Math.sin(frame * p.twinkleSpeed + p.twinklePhase);
+          const alpha = Math.max(0.05, p.opacity + twinkle * (p.opacity * 0.5));
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.colorR}, ${p.colorG}, ${p.colorB}, ${alpha})`;
+          ctx.fill();
+        }
+
+        for (let p of particles) {
           p.x += p.baseVx + Math.cos(frame * p.floatFreq + p.twinklePhase) * p.floatAmp;
           p.y += p.baseVy + Math.sin(frame * p.floatFreq + p.twinklePhase) * p.floatAmp;
-
           if (p.x < -10) p.x = W + 10;
           if (p.x > W + 10) p.x = -10;
           if (p.y < -10) p.y = H + 10;
@@ -506,16 +584,13 @@
       let current = 0;
       let isAnimating = false;
       let spinnerTimer = null;
+      let pendingCheckImg = null;
 
       window.updateLightboxSources = function() {
         const latestCards = Array.from(document.querySelectorAll('#carousel-stage .carousel-card'));
         sources = latestCards.map(c => {
           const imgEl = c.querySelector('img');
           const src = imgEl ? imgEl.src : '';
-          if (src) {
-            const pre = new Image();
-            pre.src = src;
-          }
           return {
             src: src,
             alt: imgEl ? imgEl.alt : '',
@@ -614,12 +689,18 @@
         const offScreen = isNext ? '100vw' : '-100vw';
         const outDir   = isNext ? '-100vw' : '100vw';
 
+        if (pendingCheckImg) {
+          pendingCheckImg.onload = null;
+          pendingCheckImg.onerror = null;
+        }
         const checkImg = new Image();
+        pendingCheckImg = checkImg;
         checkImg.src = targetSrc;
         const isLoaded = checkImg.complete && checkImg.naturalWidth > 0;
         if (!isLoaded) showSpinner(true);
 
         const executeSlide = () => {
+          if (checkImg !== pendingCheckImg) return;
           showSpinner(false);
 
           hiddenImg.src = targetSrc;
@@ -786,16 +867,10 @@
                   <h3 class="mb-2 font-pixel text-[10px] text-white">${feat.titulo || ''}</h3>
                   <p class="font-retro text-base leading-relaxed text-white/50">${(feat.descripcion || '').substring(0, 80)}${(feat.descripcion || '').length > 80 ? '...' : ''}</p>
                 `;
-                featuresGrid.appendChild(card);
-              });
-
-              document.querySelectorAll('.feat-clickable').forEach(card => {
                 card.addEventListener('click', () => {
-                  const idx = parseInt(card.getAttribute('data-feat-index'));
-                  const feat = cfg.caracteristicas[idx];
-                  if (!feat) return;
                   openFeatureModal(feat);
                 });
+                featuresGrid.appendChild(card);
               });
             }
           }
@@ -807,7 +882,7 @@
               const top6 = cfg.novedades.slice(0, 6);
               top6.forEach(nov => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'pixel-border rounded bg-zinc-800/20 p-6 backdrop-blur-md transition-all hover:bg-zinc-800/40 flex flex-col justify-between';
+                itemDiv.className = 'pixel-border rounded bg-zinc-800/20 p-6 backdrop-blur-sm transition-all hover:bg-zinc-800/40 flex flex-col justify-between';
 
                 const wrapper = document.createElement('div');
                 const header = document.createElement('div');
@@ -876,24 +951,24 @@
             }
           }
       }
-      if (window.siteConfig) {
-        applyConfig(window.siteConfig);
+      var CFG_VERSION = 2;
+      var cachedCfg = null;
+      try { cachedCfg = JSON.parse(sessionStorage.getItem('siteConfig')); if (cachedCfg && cachedCfg._version !== CFG_VERSION) cachedCfg = null; } catch(e) {}
+      if (cachedCfg) {
+        window.siteConfig = cachedCfg; applyConfig(cachedCfg);
       } else {
         fetch('api/obtener_config.php?v=' + Date.now())
           .then(res => res.json())
-          .then(cfg => { window.siteConfig = cfg; applyConfig(cfg); })
+          .then(cfg => {
+            window.siteConfig = cfg;
+            try { cfg._version = CFG_VERSION; sessionStorage.setItem('siteConfig', JSON.stringify(cfg)); } catch(e) {}
+            applyConfig(cfg);
+          })
           .catch(() => console.log('Landing usando contenido estático por defecto.'));
       }
 
-      fetch('api/metricas.php?tipo=visita').catch(() => {});
-
-      document.addEventListener('click', (e) => {
-        const btn = e.target.closest('a');
-        if (btn && (btn.getAttribute('href') === '#download' || btn.classList.contains('neon-btn'))) {
-          fetch('api/metricas.php?tipo=descarga').catch(() => {});
-        }
-      });
-    })();
+       fetch('api/metricas.php?tipo=visita').catch(() => {});
+     })();
 
     /* ════════════════════════════════════════════════════════════════════════
        FIGURA — Particle Logo Animation (dark/light adaptive)
@@ -1138,9 +1213,15 @@
         tryLoad(true);
       }
 
+      var figuraFrameCount = 0;
       function figuraDraw() {
         if (!figuraVisible) {
           figuraAnimFrame = null;
+          return;
+        }
+        figuraFrameCount++;
+        if (figuraAnimState === "idle" && figuraFrameCount % 2 === 0) {
+          figuraAnimFrame = requestAnimationFrame(figuraDraw);
           return;
         }
         figuraAnimFrame = requestAnimationFrame(figuraDraw);
@@ -1213,6 +1294,7 @@
         var repCutoff = Math.max(1, rR);
         var repCutoffSq = repCutoff * repCutoff;
         var pIdx = 0;
+        var fadeElapsed = ht === "roam" && figuraRoamFadeStart > 0 ? Date.now() - figuraRoamFadeStart : 0;
 
         for (var pi = 0; pi < figuraParticles.length; pi++) {
           var p = figuraParticles[pi];
@@ -1232,15 +1314,15 @@
           } else if (state === "idle") {
             if (ht === "roam") {
               var dtx = p.roamTargetX - p.x, dty = p.roamTargetY - p.y;
-              if (Math.sqrt(dtx * dtx + dty * dty) < 3) {
+              if (dtx * dtx + dty * dty < 9) {
                 var tgt = figuraRandomInShape(rs, bx, by, bw, bh);
                 p.roamTargetX = tgt[0];
                 p.roamTargetY = tgt[1];
               }
               p.vx = (p.vx || 0) * 0.98 + (p.roamTargetX - p.x) * 0.003;
               p.vy = (p.vy || 0) * 0.98 + (p.roamTargetY - p.y) * 0.003;
-              var sp2 = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-              if (sp2 > 1.5) { p.vx = (p.vx / sp2) * 1.5; p.vy = (p.vy / sp2) * 1.5; }
+              var sp2_sq = p.vx * p.vx + p.vy * p.vy;
+              if (sp2_sq > 2.25) { var sp2 = Math.sqrt(sp2_sq); p.vx = (p.vx / sp2) * 1.5; p.vy = (p.vy / sp2) * 1.5; }
               p.x += p.vx;
               p.y += p.vy;
               baseX = p.x;
@@ -1254,8 +1336,7 @@
           if (repOn) {
             if (rMode === "random") {
               var dxr = baseX - rawMx, dyr = baseY - rawMy;
-              var distR = Math.sqrt(dxr * dxr + dyr * dyr);
-              if (distR < repCutoff) {
+              if (dxr * dxr + dyr * dyr < repCutoffSq) {
                 if (!p.inZone) {
                   var angR = Math.random() * Math.PI * 2;
                   var dR = Math.random() * rF * 5;
@@ -1298,10 +1379,9 @@
             var alphaMul;
             if (figuraRoamFadeStart === 0) { alphaMul = rOp != null ? rOp : 0.5; }
             else {
-              var fadeElapsed = Date.now() - figuraRoamFadeStart;
-              var fadeT = Math.min(1, Math.max(0, fadeElapsed / durMs));
-              var easedFadeT = easeFn(fadeT);
-              alphaMul = figuraRoamFadeFrom + (figuraRoamFadeTo - figuraRoamFadeFrom) * easedFadeT;
+              var feT = Math.min(1, Math.max(0, fadeElapsed / durMs));
+              var feEased = easeFn(feT);
+              alphaMul = figuraRoamFadeFrom + (figuraRoamFadeTo - figuraRoamFadeFrom) * feEased;
             }
             dr = p.r; dg = p.g; db = p.b;
             da = Math.round(p.a * alphaMul);

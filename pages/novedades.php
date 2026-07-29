@@ -1,5 +1,5 @@
 <?php $base = '../'; ?>
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php'; ?>
 
   <style>
 
@@ -52,7 +52,7 @@
     </div>
   </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
 
   <script>
     let currentConfig = null;
@@ -84,7 +84,7 @@
       } else {
         pageItems.forEach(nov => {
           const itemDiv = document.createElement('div');
-          itemDiv.className = 'pixel-border rounded bg-zinc-800/20 p-6 backdrop-blur-md transition-all hover:bg-zinc-800/40 flex flex-col justify-between nov-card';
+          itemDiv.className = 'pixel-border rounded bg-zinc-800/20 p-6 backdrop-blur-sm transition-all hover:bg-zinc-800/40 flex flex-col justify-between nov-card';
 
           const wrapper = document.createElement('div');
 
@@ -92,7 +92,7 @@
           header.className = 'flex items-center justify-between mb-3';
 
           const tag = document.createElement('span');
-          tag.className = 'font-pixel text-[9px]';
+          tag.className = 'font-pixel text-[11px]';
           tag.style.color = nov.tag_color || '#ff0033';
           tag.textContent = nov.tag || '';
 
@@ -154,13 +154,22 @@
       currentConfig = cfg;
       renderPage(1);
     }
-    if (window.siteConfig) {
+    var CFG_VERSION = 2;
+    var cached = null;
+    try { cached = JSON.parse(sessionStorage.getItem('siteConfig')); if (cached && cached._version !== CFG_VERSION) cached = null; } catch(e) {}
+    if (cached) {
+      initNovedades(cached);
+    } else if (window.siteConfig) {
       initNovedades(window.siteConfig);
     } else {
       fetch('<?=$base?>api/obtener_config.php?v=' + Date.now())
         .then(res => res.json())
-        .then(cfg => { window.siteConfig = cfg; initNovedades(cfg); })
-        .catch(err => console.error(err));
+        .then(function(cfg) {
+          window.siteConfig = cfg;
+          try { cfg._version = CFG_VERSION; sessionStorage.setItem('siteConfig', JSON.stringify(cfg)); } catch(e) {}
+          initNovedades(cfg);
+        })
+        .catch(function(err) { console.error(err); });
     }
   </script>
 </body>

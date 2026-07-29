@@ -44,13 +44,13 @@
 <body id="top">
 
   <?php $basePath = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php') ? '' : $base . 'index.php'; ?>
-  <nav class="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md">
+  <nav class="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-sm">
     <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
 
       <a href="<?=$base?>index.php" class="flex items-center gap-2">
         <img src="<?=$base?>uploads/imagenes/logo_oscuro.png" alt="" class="logo-dark h-8 sm:h-10">
         <img src="<?=$base?>uploads/imagenes/logo_claro.png" alt="" class="logo-light h-8 sm:h-10">
-        <span class="glitch font-pixel text-[8px] sm:text-[10px] tracking-widest text-white/90 nav-glitch" data-text="THE VOID THRESHOLD">THE VOID THRESHOLD</span>
+        <span class="glitch font-pixel text-[11px] sm:text-[10px] tracking-widest text-white/90 nav-glitch" data-text="THE VOID THRESHOLD">THE VOID THRESHOLD</span>
       </a>
 
       <div class="hidden items-center gap-6 md:flex">
@@ -89,14 +89,14 @@
           </button>
 
           <div id="volume-panel"
-            class="volume-panel hidden group-hover:block absolute top-[100%] left-1/2 -translate-x-1/2 bg-[#18181B] border border-white/10 rounded px-3 py-2 z-50">
+            class="volume-panel hidden group-hover:block md:group-hover:block absolute top-[100%] left-1/2 -translate-x-1/2 bg-[#18181B] border border-white/10 rounded px-3 py-2 z-50">
             <input id="volume-slider" type="range" min="0" max="100" value="70" class="volume-slider"
               aria-label="Volumen">
           </div>
         </div>
 
         <a href="<?= $basePath ?>#download"
-          class="neon-btn header-dl-link hidden rounded bg-[#ff0033] px-4 py-2 font-pixel text-[9px] text-white transition-all hover:bg-[#ff1a4d] sm:block">
+          class="neon-btn header-dl-link hidden rounded bg-[#ff0033] px-4 py-2 font-pixel text-[11px] text-white transition-all hover:bg-[#ff1a4d] sm:block">
           DESCARGAR DEMO
         </a>
 
@@ -110,11 +110,11 @@
 
   </nav>
 
-  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
 
   <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-[#1a1a1f] border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col">
     <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
-      <span class="font-pixel text-[9px] tracking-widest text-white">MENÚ</span>
+      <span class="font-pixel text-[11px] tracking-widest text-white">MENÚ</span>
       <button id="mobile-close-btn" class="text-white/70 hover:text-white transition-colors p-1">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -131,7 +131,7 @@
         </svg>
         <span>Cambiar tema</span>
       </button>
-      <a href="<?= $basePath ?>#download" class="mobile-link neon-btn header-dl-link block w-full rounded bg-[#ff0033] px-4 py-3 text-center font-pixel text-[9px] text-white">DESCARGAR DEMO</a>
+      <a href="<?= $basePath ?>#download" class="mobile-link neon-btn header-dl-link block w-full rounded bg-[#ff0033] px-4 py-3 text-center font-pixel text-[11px] text-white">DESCARGAR DEMO</a>
     </div>
   </div>
 
@@ -230,10 +230,14 @@
       observer.observe(el, { childList: true, characterData: true, subtree: true });
     });
 
-    const clickAudio = new Audio('<?=$base?>uploads/audio/audio_clic.mp3');
+    let clickAudio = null;
 
     window.playClick = function() {
-      clickAudio.cloneNode().play().catch(e => console.log("Audio play failed:", e));
+      if (!clickAudio) {
+        clickAudio = new Audio('<?=$base?>uploads/audio/audio_clic.mp3');
+      }
+      clickAudio.currentTime = 0;
+      clickAudio.play().catch(function(e) { if (e.name !== 'AbortError') console.error("playClick error:", e); });
     };
 
     const bgMusic = document.getElementById('bg-music');
@@ -252,8 +256,16 @@
       else musicIcon.innerHTML = iconOn;
     }
 
-    volIconBtn.addEventListener('click', (e) => {
+    function toggleVolumePanel(e) {
+      if (window.innerWidth > 768) return;
+      const panel = document.getElementById('volume-panel');
+      if (!panel) return;
       e.stopPropagation();
+      panel.classList.toggle('active');
+    }
+
+    volIconBtn.addEventListener('click', (e) => {
+      toggleVolumePanel(e);
       if (isMusicPlaying) {
         bgMusic.pause();
         isMusicPlaying = false;
@@ -261,9 +273,19 @@
         bgMusic.play().then(() => {
           isMusicPlaying = true;
           updateVolIcon();
-        }).catch(() => { });
+        }).catch(function(e) { console.error('bgMusic error:', e); });
       }
       updateVolIcon();
+      updateSliderBackground();
+    });
+
+    document.addEventListener('click', function(e) {
+      if (window.innerWidth > 768) return;
+      const panel = document.getElementById('volume-panel');
+      const btn = document.getElementById('vol-icon-btn');
+      if (panel && panel.classList.contains('active') && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.remove('active');
+      }
     });
 
     function updateSliderBackground() {
@@ -287,56 +309,71 @@
         bgMusic.play().then(() => {
           isMusicPlaying = true;
           updateVolIcon();
-        }).catch(() => { });
+        }).catch(function(e) { console.error('bgMusic slider error:', e); });
       }
       updateVolIcon();
       updateSliderBackground();
     });
 
     function setupAudio() {
-      const interactiveElements = [
-        ...document.querySelectorAll('.neon-btn'),
-        ...document.querySelectorAll('.nav-link'),
-        ...document.querySelectorAll('footer a'),
-        document.getElementById('menu-btn'),
-        document.querySelector('nav a.flex'),
-        ...document.querySelectorAll('#features > div')
-      ].filter(Boolean);
-      interactiveElements.forEach(el => {
-        el.addEventListener('click', playClick);
+      document.addEventListener('click', function(e) {
+        var t = e.target.closest('.neon-btn, .nav-link, footer a, #menu-btn, nav a.flex, #features > div, .nov-card, .nov-pagination-btn');
+        if (t) playClick();
       });
     }
     setupAudio();
 
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('a');
+      if (btn && (btn.classList.contains('header-dl-link') || btn.getAttribute('href') === '#download' || btn.classList.contains('neon-btn'))) {
+        fetch('<?=$base?>api/metricas.php?tipo=descarga').catch(function() {});
+      }
+    });
+
+    var CFG_VERSION = 2;
+    var cachedCfg = null;
+    try { cachedCfg = JSON.parse(sessionStorage.getItem('siteConfig')); if (cachedCfg && cachedCfg._version !== CFG_VERSION) cachedCfg = null; } catch(e) {}
+    if (cachedCfg) {
+      applyHeaderConfig(cachedCfg);
+    } else {
     fetch('<?=$base?>api/obtener_config.php?v=' + Date.now())
       .then(res => res.json())
-      .then(cfg => {
+      .then(function(cfg) {
         window.siteConfig = cfg;
-        if (!cfg || !cfg.general) return;
-        const g = cfg.general;
-        const dlLinks = document.querySelectorAll('.header-dl-link');
-        dlLinks.forEach(a => {
-          if (g.boton_descarga_texto) a.textContent = g.boton_descarga_texto;
-          if (g.enlace_descarga && g.enlace_descarga !== 'javascript:void(0)' && g.enlace_descarga !== '#') {
-            a.href = g.enlace_descarga;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-          }
-        });
-        if (cfg.multimedia) {
-          if (cfg.multimedia.audio_musica) {
-            const bgMusicEl = document.getElementById('bg-music');
-            if (bgMusicEl) bgMusicEl.src = cfg.multimedia.audio_musica;
-          }
-          if (cfg.multimedia.audio_clic) {
-            window.playClick = function() {
-              const a = new Audio(cfg.multimedia.audio_clic);
-              a.volume = 0.5;
-              a.play().catch(() => {});
-            };
-          }
-        }
+        try { cfg._version = CFG_VERSION; sessionStorage.setItem('siteConfig', JSON.stringify(cfg)); } catch(e) {}
+        applyHeaderConfig(cfg);
       })
       .catch(() => {});
+    }
+
+    function applyHeaderConfig(cfg) {
+      if (!cfg || !cfg.general) return;
+      const g = cfg.general;
+      const dlLinks = document.querySelectorAll('.header-dl-link');
+      dlLinks.forEach(a => {
+        if (g.boton_descarga_texto) a.textContent = g.boton_descarga_texto;
+        if (g.enlace_descarga && g.enlace_descarga !== 'javascript:void(0)' && g.enlace_descarga !== '#') {
+          a.href = g.enlace_descarga;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
+      });
+      if (cfg.multimedia) {
+        if (cfg.multimedia.audio_musica) {
+          const bgMusicEl = document.getElementById('bg-music');
+          if (bgMusicEl) bgMusicEl.src = '<?=$base?>' + cfg.multimedia.audio_musica;
+        }
+        if (cfg.multimedia.audio_clic) {
+          window.playClick = function() {
+            if (!clickAudio) {
+              clickAudio = new Audio('<?=$base?>' + cfg.multimedia.audio_clic);
+              clickAudio.volume = 0.5;
+            }
+            clickAudio.currentTime = 0;
+            clickAudio.play().catch(function(e) { if (e.name !== 'AbortError') console.error('playClick from config error:', e); });
+          };
+        }
+      }
+    }
   });
   </script>

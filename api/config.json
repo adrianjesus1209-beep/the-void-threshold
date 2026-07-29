@@ -7,50 +7,50 @@
         "enlace_descarga": "https:\/\/www.mediafire.com\/file\/xo56ti9x97eshdn\/juego.rar\/file"
     },
     "multimedia": {
-        "fondo": "uploads\/imagenes\/fondo.jpg",
-        "logo_claro": "uploads\/imagenes\/logo_claro.png",
-        "logo_oscuro": "uploads\/imagenes\/logo_oscuro.png",
+        "fondo": "uploads\/imagenes\/fondo.webp",
+        "logo_claro": "uploads\/imagenes\/logo_claro.webp",
+        "logo_oscuro": "uploads\/imagenes\/logo_oscuro.webp",
         "audio_clic": "uploads\/audio\/audio_clic.mp3",
         "audio_musica": "uploads\/audio\/audio_musica.mp3",
         "fotos": [
             {
-                "url": "uploads\/galeria\/foto_0.jpeg",
+                "url": "uploads\/galeria\/foto_0.webp",
                 "descripcion": "onda rotativa transexual"
             },
             {
-                "url": "uploads\/galeria\/foto_1.jpg",
+                "url": "uploads\/galeria\/foto_1.webp",
                 "descripcion": "monda paraa"
             },
             {
-                "url": "uploads\/galeria\/foto_2.jpeg",
+                "url": "uploads\/galeria\/foto_2.webp",
                 "descripcion": "Linux penguin"
             },
             {
-                "url": "uploads\/galeria\/foto_3.jpg",
+                "url": "uploads\/galeria\/foto_3.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_4.jpg",
+                "url": "uploads\/galeria\/foto_4.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_5.jpg",
+                "url": "uploads\/galeria\/foto_5.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_6.jpg",
+                "url": "uploads\/galeria\/foto_6.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_7.jpg",
+                "url": "uploads\/galeria\/foto_7.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_8.jpg",
+                "url": "uploads\/galeria\/foto_8.webp",
                 "descripcion": ""
             },
             {
-                "url": "uploads\/galeria\/foto_9.jpg",
+                "url": "uploads\/galeria\/foto_9.webp",
                 "descripcion": ""
             }
         ]
@@ -85,6 +85,54 @@
             "fecha": "HOY",
             "titulo": "Título de la Novedad",
             "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 4,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 5,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 6,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 7,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 8,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
+        },
+        {
+            "id": 9,
+            "tag": "NUEVA ACTUALIZACIÓN",
+            "tag_color": "#ff0033",
+            "fecha": "HOY",
+            "titulo": "Título de la Novedad",
+            "descripcion": "Descripción de la novedad..."
         }
     ],
     "caracteristicas": [
@@ -93,21 +141,21 @@
             "color": "#ff0033",
             "titulo": "MUNDOS PROCEDURALES",
             "descripcion": "Cada partida genera un mundo pixelado único lleno de secretos y peligro. claro solo si te gustan las mujeres por que al ser una negra tan bastarda aveces es dudosa tu hombria pinche maricon",
-            "imagen": "uploads\/imagenes\/feat_0.png"
+            "imagen": "uploads\/imagenes\/feat_0.webp"
         },
         {
             "numero": "02",
             "color": "#0040ff",
             "titulo": "BANDA SONORA 8-BIT",
             "descripcion": "Una partitura chiptune que se adapta a tu descenso hacia el vacío.",
-            "imagen": "uploads\/imagenes\/feat_1.jpg"
+            "imagen": "uploads\/imagenes\/feat_1.webp"
         },
         {
             "numero": "03",
             "color": "#ff0033",
             "titulo": "JEFE FINALES",
             "descripcion": "Enfrenta guardianes monstruosos en el umbral de cada dimensión.",
-            "imagen": "uploads\/imagenes\/feat_2.jpeg"
+            "imagen": "uploads\/imagenes\/feat_2.webp"
         }
     ]
 }

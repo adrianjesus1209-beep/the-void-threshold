@@ -8,7 +8,8 @@ if (!isset($_SESSION['admin_token_validated'])) {
     $token_recibido = $_GET['t'] ?? '';
     $token_db = obtenerTokenAdmin();
 
-    if (!$token_db || !hash_equals($token_db, $token_recibido)) {
+    $token_hash = hash('sha256', $token_recibido);
+    if (!$token_db || !hash_equals($token_db, $token_hash)) {
         header('Location: ../index.php');
         exit;
     }

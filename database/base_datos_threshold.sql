@@ -46,7 +46,7 @@ CREATE TABLE `admin_config` (
 
 LOCK TABLES `admin_config` WRITE;
 /*!40000 ALTER TABLE `admin_config` DISABLE KEYS */;
-INSERT INTO `admin_config` VALUES (1,'admin_token','aa1qPzDdwu1LMcy97nbzHdv7cXfnsUohE10IKxdzM7fjp8DhF_NZsokSyJth2u46'),(3,'admin_password_hash','$2y$12$.TXfJLSia3npv3j5Q0c1QuSWUkjIEnpFib4NPD/pCngSC/sgY03oK');
+INSERT INTO `admin_config` VALUES (1,'admin_token','1beee0952aec0ce98e040f1f1a5433c637cd9aa1d182d4a2ddb1d4e669cd1b94'),(3,'admin_password_hash','$2y$12$.TXfJLSia3npv3j5Q0c1QuSWUkjIEnpFib4NPD/pCngSC/sgY03oK');
 /*!40000 ALTER TABLE `admin_config` ENABLE KEYS */;
 UNLOCK TABLES;
 

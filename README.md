@@ -10,7 +10,7 @@ Landing page interactiva para un juego indie de terror pixel art con panel de ad
 
 ## Instalación
 
-1. Clonar: `git clone https://github.com/adrianjesus1209-beep/the-void-threshold.git`
+1. Clonar: `git clone https://github.com/adrianjesus1209-beep/the-void-threshold_JUEGO.git`
 2. Mover a tu directorio dehtdocs
 3. Configurar `api/config_db.php` con tus credenciales MySQL
 4. Importar la base de datos desde `database/`

@@ -3,16 +3,21 @@ require_once __DIR__ . '/config_db.php';
 
 function obtenerConexionDB() {
     global $db_config;
+    static $conexion = null;
 
-    return new PDO(
-        "mysql:host={$db_config['host']};port={$db_config['puerto']};dbname={$db_config['db_name']};charset={$db_config['charset']}",
-        $db_config['usuario'],
-        $db_config['password'],
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]
-    );
+    if ($conexion === null) {
+        $conexion = new PDO(
+            "mysql:host={$db_config['host']};port={$db_config['puerto']};dbname={$db_config['db_name']};charset={$db_config['charset']}",
+            $db_config['usuario'],
+            $db_config['password'],
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]
+        );
+    }
+
+    return $conexion;
 }
 
 function obtenerTokenAdmin() {

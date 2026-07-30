@@ -89,7 +89,9 @@ CREATE TABLE `registros_metricas` (
   `tipo` enum('visita','descarga') NOT NULL,
   `direccion_ip` varchar(45) NOT NULL,
   `fecha_registro` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_tipo_fecha` (`tipo`,`fecha_registro`),
+  KEY `idx_fecha_registro` (`fecha_registro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=441 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

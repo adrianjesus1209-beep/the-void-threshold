@@ -52,14 +52,17 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
-$queryVisitas = $conexion->query("SELECT COUNT(*) AS total FROM registros_metricas WHERE tipo = 'visita'");
-$visitasTotales = (int)$queryVisitas->fetch()['total'];
-
-$queryDescargas = $conexion->query("SELECT COUNT(*) AS total FROM registros_metricas WHERE tipo = 'descarga'");
-$descargasTotales = (int)$queryDescargas->fetch()['total'];
-
-$queryUsuariosUnicos = $conexion->query("SELECT COUNT(DISTINCT direccion_ip) AS total FROM registros_metricas WHERE tipo = 'visita'");
-$usuariosUnicos = (int)$queryUsuariosUnicos->fetch()['total'];
+$queryTotals = $conexion->query(
+    "SELECT 
+        SUM(CASE WHEN tipo = 'visita' THEN 1 ELSE 0 END) AS visitas,
+        SUM(CASE WHEN tipo = 'descarga' THEN 1 ELSE 0 END) AS descargas,
+        COUNT(DISTINCT CASE WHEN tipo = 'visita' THEN direccion_ip END) AS usuarios_unicos
+     FROM registros_metricas"
+);
+$totalsRow = $queryTotals->fetch();
+$visitasTotales = (int)($totalsRow['visitas'] ?? 0);
+$descargasTotales = (int)($totalsRow['descargas'] ?? 0);
+$usuariosUnicos = (int)($totalsRow['usuarios_unicos'] ?? 0);
 
 $fechaInicioParam = $_GET['fecha_inicio'] ?? '';
 $fechaFinParam = $_GET['fecha_fin'] ?? '';
@@ -92,27 +95,41 @@ $visitasSemana = [];
 $descargasSemana = [];
 
 if (!$esSemanal) {
+    $stmtDaily = $conexion->prepare(
+        "SELECT DATE(fecha_registro) AS fecha, tipo, COUNT(*) AS total
+         FROM registros_metricas
+         WHERE fecha_registro >= :inicio AND fecha_registro <= :fin
+         GROUP BY DATE(fecha_registro), tipo"
+    );
+    $stmtDaily->execute([
+        ':inicio' => $fechaInicio . ' 00:00:00',
+        ':fin' => $fechaFin . ' 23:59:59'
+    ]);
+    $rows = $stmtDaily->fetchAll();
+
+    $dailyData = [];
+    foreach ($rows as $row) {
+        $dailyData[$row['fecha']][$row['tipo']] = (int)$row['total'];
+    }
+
     for ($i = 0; $i < $diasRango; $i++) {
         $fecha = date('Y-m-d', strtotime("$fechaInicio +{$i} days"));
         $labels[] = date('d M', strtotime($fecha));
-
-        $stmtV = $conexion->prepare("SELECT COUNT(*) AS total FROM registros_metricas WHERE tipo = 'visita' AND DATE(fecha_registro) = :fecha");
-        $stmtV->execute([':fecha' => $fecha]);
-        $visitasSemana[] = (int)$stmtV->fetch()['total'];
-
-        $stmtD = $conexion->prepare("SELECT COUNT(*) AS total FROM registros_metricas WHERE tipo = 'descarga' AND DATE(fecha_registro) = :fecha");
-        $stmtD->execute([':fecha' => $fecha]);
-        $descargasSemana[] = (int)$stmtD->fetch()['total'];
+        $visitasSemana[] = $dailyData[$fecha]['visita'] ?? 0;
+        $descargasSemana[] = $dailyData[$fecha]['descarga'] ?? 0;
     }
 } else {
     $stmtWeeks = $conexion->prepare(
         "SELECT YEARWEEK(fecha_registro, 1) AS semana, tipo, COUNT(*) AS total
          FROM registros_metricas
-         WHERE DATE(fecha_registro) BETWEEN :inicio AND :fin
+         WHERE fecha_registro >= :inicio AND fecha_registro <= :fin
          GROUP BY YEARWEEK(fecha_registro, 1), tipo
          ORDER BY semana ASC"
     );
-    $stmtWeeks->execute([':inicio' => $fechaInicio, ':fin' => $fechaFin]);
+    $stmtWeeks->execute([
+        ':inicio' => $fechaInicio . ' 00:00:00',
+        ':fin' => $fechaFin . ' 23:59:59'
+    ]);
     $rows = $stmtWeeks->fetchAll();
 
     $semanas = [];

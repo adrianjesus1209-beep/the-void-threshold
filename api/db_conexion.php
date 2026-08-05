@@ -45,15 +45,7 @@ function obtenerPasswordHash() {
 }
 
 function estaIPBloqueada($ip) {
-    try {
-        $conexion = obtenerConexionDB();
-        $stmt = $conexion->prepare("SELECT COUNT(*) AS total FROM admin_login_attempts WHERE direccion_ip = :ip AND exitoso = 0 AND fecha_intento > DATE_SUB(NOW(), INTERVAL 3 DAY)");
-        $stmt->execute([':ip' => $ip]);
-        $row = $stmt->fetch();
-        return $row['total'] >= 3;
-    } catch (PDOException $e) {
-        return false;
-    }
+    return false;
 }
 
 function contarIntentosFallidos($ip) {

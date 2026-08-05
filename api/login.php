@@ -20,12 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     $clave = $input['clave'] ?? '';
 
-    if (estaIPBloqueada($ip)) {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'mensaje' => 'Tu IP está bloqueada por 3 días por múltiples intentos fallidos.']);
-        exit;
-    }
-
     $password_hash = obtenerPasswordHash();
     if (!$password_hash) {
         http_response_code(500);
@@ -39,14 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => true, 'mensaje' => 'Sesión iniciada correctamente']);
     } else {
         registrarIntento($ip, false);
-        $intentos = contarIntentosFallidos($ip);
-        $restantes = 3 - $intentos;
         http_response_code(401);
-        if ($restantes <= 0) {
-            echo json_encode(['success' => false, 'mensaje' => 'Tu IP quedó bloqueada por 3 días por múltiples intentos fallidos.']);
-        } else {
-            echo json_encode(['success' => false, 'mensaje' => "Contraseña incorrecta. Intentos restantes: $restantes"]);
-        }
+        echo json_encode(['success' => false, 'mensaje' => 'Contraseña incorrecta.']);
     }
     exit;
 }
